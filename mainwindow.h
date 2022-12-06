@@ -19,10 +19,16 @@ class MainWindow : public QMainWindow
 
     QNetworkAccessManager * mgr;
 
+
+
 public slots:
-    void onFinish(QNetworkReply *rep);
-    void slotSslErrors(const QList<QSslError> &errors);
-    void slotError(QNetworkReply::NetworkError code);
+    void    onFinish(QNetworkReply *rep);
+    void    slotSslErrors(const QList<QSslError> &errors);
+    void    slotError(QNetworkReply::NetworkError code);
+
+
+    void    sslErrors(QNetworkReply *rep, QList<QSslError> err);
+    void    uploadProgress(qint64 one,qint64 two);
 
 
 public:
