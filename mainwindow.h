@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
     QNetworkAccessManager * mgr;
+    QString                 _token;
 
 
 
@@ -35,6 +36,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     void postRequest(QByteArray & postData);
     QHttpPart part_parameter(QString key, QString value);
+
+    void       getToken();
+
 
     ~MainWindow();
 
