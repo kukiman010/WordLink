@@ -38,7 +38,7 @@ private:
 
     void                        settings();
     void                        loadSettings();
-    QJsonObject ObjectFromString(const QString& in);
+    QJsonObject                 ObjectFromString(const QString& in);
 
 
 public:
@@ -47,7 +47,7 @@ public:
 
     void                        postRequest(const QString & lang_to, const QString & lang_from, const QStringList & data);
     void                        getListLanguages();
-    QHttpPart                   part_parameter(QString key, QString value);
+//    QHttpPart                   part_parameter(QString key, QString value);
     void                        getToken();
     void                        saveSettings();
 };

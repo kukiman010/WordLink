@@ -2,7 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <translete_yandex.h>
+//#include <QInputMethod>
+#include <QLocale>
+#include "translete_yandex.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -12,8 +14,8 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    Yandex_translete * yt;
-    QMap<QString, QString> language;
+    Yandex_translete          * yt;
+    QMap<QString, QString>      language;
 
 public slots:
     void                        show_in_gui(QStringList qsl);

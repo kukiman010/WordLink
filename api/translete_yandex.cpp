@@ -7,7 +7,7 @@ Yandex_translete::Yandex_translete(QObject * parent) : QObject( parent )
 
 Yandex_translete::~Yandex_translete()
 {
-
+    saveSettings();
 }
 
 void Yandex_translete::settings()
@@ -90,7 +90,6 @@ void Yandex_translete::postRequest(const QString & lang_to, const QString & lang
     req.setRawHeader("Authorization", QString("Bearer %1").arg(_token).toUtf8());
     req.setRawHeader("Accept","application/json");
 //    QNetworkReply* rep = mgr->post(req,"{'sourceLanguageCode':'ru','targetLanguageCode':'en','texts':['хочу еще этих мягких булочек, проверка работы API'],'folderId':'b1gdeb0pudkrac4ij1hd'}");
-//    QNetworkReply* rep = _mgr->post(req,"{'sourceLanguageCode':'en','targetLanguageCode':'ru','texts':['I want more of these soft buns, checking the API'],'folderId':'b1gdeb0pudkrac4ij1hd'}");
     QNetworkReply* rep = _mgr->post(req, body.toUtf8());
     connect(rep,SIGNAL(uploadProgress(qint64,qint64)),this,SLOT(uploadProgress(qint64,qint64)));
 }
@@ -110,23 +109,18 @@ void Yandex_translete::onFinish(QNetworkReply *rep)
 {
     qDebug() << "onFinish";
     QStringList qsl;
-
-//    QJsonParseError parseError;
     QJsonDocument jsonDoc;
-
     QString text;
 
 //    qsl << "Error: " + rep->errorString() + "\n\n";
 
     if(!rep->isOpen())
     {
-//        ui->textEdit->setText("NetworkReply didn't open!!");
         qDebug() << "NetworkReply didn't open!!";
         rep->deleteLater();
         return ;
     }
     QString str = rep->readAll();
-//    qsl << "Text: " + str + "\n\n";
 
     rep->close();
     rep->deleteLater();
@@ -190,13 +184,13 @@ void Yandex_translete::uploadProgress(qint64 one,qint64 two)
 }
 
 
-QHttpPart Yandex_translete::part_parameter(QString key, QString value)
-{
-    QHttpPart part;
-    part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\""+ key +"\""));
-    part.setBody(value.toLatin1());
-    return part;
-}
+//QHttpPart Yandex_translete::part_parameter(QString key, QString value)
+//{
+//    QHttpPart part;
+//    part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\""+ key +"\""));
+//    part.setBody(value.toLatin1());
+//    return part;
+//}
 
 void Yandex_translete::getToken()
 {
@@ -213,8 +207,6 @@ void Yandex_translete::getToken()
     if(!out.isEmpty())
         _token = out[0];
 }
-
-
 
 QJsonObject Yandex_translete::ObjectFromString(const QString& in)
 {
