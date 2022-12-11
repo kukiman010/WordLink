@@ -13,9 +13,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
     Yandex_translete * yt;
+    QMap<QString, QString> language;
 
 public slots:
     void                        show_in_gui(QStringList qsl);
+    void                        get_lang(QStringList qsl);
 
 public:
     MainWindow(QWidget *parent = nullptr);
@@ -24,6 +26,8 @@ public:
 private slots:
     void                        on_translete_clicked();
 //    void                        translate(QString str);
+
+    void on_swap_clicked();
 
 private:
     Ui::MainWindow *ui;

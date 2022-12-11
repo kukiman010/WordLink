@@ -111,12 +111,12 @@ void Yandex_translete::onFinish(QNetworkReply *rep)
     qDebug() << "onFinish";
     QStringList qsl;
 
-    QJsonParseError parseError;
+//    QJsonParseError parseError;
     QJsonDocument jsonDoc;
 
     QString text;
 
-    qsl << "Error: " + rep->errorString() + "\n\n";
+//    qsl << "Error: " + rep->errorString() + "\n\n";
 
     if(!rep->isOpen())
     {
@@ -126,19 +126,41 @@ void Yandex_translete::onFinish(QNetworkReply *rep)
         return ;
     }
     QString str = rep->readAll();
-    qsl << "Text: " + str + "\n\n";
+//    qsl << "Text: " + str + "\n\n";
 
     rep->close();
     rep->deleteLater();
 
-    jsonDoc = QJsonDocument::fromJson( rep->readAll(), &parseError );
+    QJsonObject doc = ObjectFromString(str);
 
+    foreach(const QString key, doc.keys())
+    {
+        if(key == "languages")
+        {
+            foreach( QJsonValue qjv, doc.value(key).toArray())
+            {
+                QString line;
+                foreach(const QString key2, qjv.toObject().keys())
+                {
+                    if(key2 == "code")
+                        line = qjv.toObject().value(key2).toString().toUtf8();
+                    if(key2 == "name")
+                        qsl << line + " " + qjv.toObject().value(key2).toString().toUtf8();
+                }
+            }
+            emit sendLanguages(qsl);
+        }
+        else if(key == "translations")
+        {
+            foreach( QJsonValue qjv, doc.value(key).toArray())
+                foreach(const QString key2, qjv.toObject().keys())
+                    if(key2 == "text")
+                        qsl << qjv.toObject().value(key2).toString().toUtf8();
 
+            emit sendTranslete(qsl);
+        }
 
-//    ui->textEdit->setText(text);
-//    qDebug() <<str;
-//    return qsl;
-    emit sendTranslete(qsl);
+    }
 }
 
 void Yandex_translete::slotSslErrors(const QList<QSslError> &errors)
@@ -192,3 +214,22 @@ void Yandex_translete::getToken()
         _token = out[0];
 }
 
+
+
+QJsonObject Yandex_translete::ObjectFromString(const QString& in)
+{
+    QJsonObject obj;
+    QJsonDocument doc = QJsonDocument::fromJson(in.toUtf8());
+
+    if(!doc.isNull())
+    {
+        if(doc.isObject())
+            return doc.object();
+        else
+            qDebug() << "Document is not an object" << endl;
+    }
+    else
+        qDebug() << "Invalid JSON...\n" << in << endl;
+
+    return obj;
+}

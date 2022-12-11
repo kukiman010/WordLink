@@ -38,6 +38,7 @@ private:
 
     void                        settings();
     void                        loadSettings();
+    QJsonObject ObjectFromString(const QString& in);
 
 
 public:

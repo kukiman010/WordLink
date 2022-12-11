@@ -46,13 +46,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox">
-         <item>
-          <property name="text">
-           <string>Автоперевод</string>
-          </property>
-         </item>
-        </widget>
+        <widget class="QComboBox" name="lang_from"/>
        </item>
        <item>
         <widget class="QPushButton" name="translete">
