@@ -1,105 +1,87 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "myswipegesture.h"
 
-#include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->verticalLayout->setContentsMargins(0, 0, 0, 0);
+    ui->stackedWidget->setContentsMargins(0, 0, 0, 0);
+//    connect(ui->stackedWidget, SIGNAL(finished()), this, SLOT(setupNextLesson()));
 
-    yt = new Yandex_translete(this);
+    translation = new Translation();
+    dictionary = new Dictionary();
+    training = new Training();
+    setting = new Settings();
 
-    ui->type_dicionary->addItem("Yandex dictionary",1);
-    ui->type_dicionary->addItem("Urban dictionary",2);
 
-    connect(yt, &Yandex_translete::sendTranslete, this, &MainWindow::show_in_gui);
-    connect(yt, &Yandex_translete::sendLanguages, this, &MainWindow::get_lang);
+    ui->stackedWidget->addWidget(translation);
+    ui->stackedWidget->addWidget(dictionary);
+    ui->stackedWidget->addWidget(training);
+    ui->stackedWidget->addWidget(setting);
 
-    yt->getListLanguages();
+
+    qDebug() << ui->stackedWidget->count();
+
+    QString num = QString::number(ui->stackedWidget->count());
+    ui->statusbar->showMessage( ("Количесво страниц " + num) );
+
+
+
+
+    _swipeGesture = new MySwipeGesture(this);
+    connect(_swipeGesture,SIGNAL(handleSwipe(MySwipeGesture::SwipeDirection)),this,SLOT(swipe(MySwipeGesture::SwipeDirection)));
+
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete yt;
 }
 
-void MainWindow::show_in_gui(QStringList qsl)
+bool MainWindow::event(QEvent *event)
 {
-    QString str;
-    foreach(QString s, qsl)
-        str += s + "\n\n";
-
-    ui->out_translate->setText(str);
+    _swipeGesture->handleEvent(event);
+        return QWidget::event(event);
 }
 
-void MainWindow::get_lang(QStringList qsl)
+void MainWindow::swipe(MySwipeGesture::SwipeDirection direction)
 {
-    language.clear();
-    ui->lang_to->clear();
-    ui->lang_from->clear();
+    int count = ui->stackedWidget->count();
+    int page = ui->stackedWidget->currentIndex();
 
-    for(int i=0; i < qsl.size(); ++i)
+    if(direction == MySwipeGesture::Right)
     {
-        QStringList codec = qsl[i].split(" ");
-        if( !codec.isEmpty() && codec.size() == 2 )
-            if(codec[0] != "" && codec[1] != "")
-            {
-                language.insert(codec[1], codec[0]);
-                ui->lang_to->addItem(codec[1], codec[0]);
-                ui->lang_from->addItem(codec[1], codec[0]);
-            }
+        qDebug() << "Right";
+        if(page-1 >= 0)
+            ui->stackedWidget->setCurrentIndex(--page);
+    }
+    else if(direction == MySwipeGesture::Left)
+    {
+        qDebug() << "Left";
+        if(page+1 < count)
+            ui->stackedWidget->setCurrentIndex(++page);
     }
 
+    QString num = QString::number(ui->stackedWidget->currentIndex()+1);
+    ui->statusbar->showMessage( ("Страница № " + num) );
 
-    QStringList l = QLocale::system().name().split("_");
-
-    if(!l.isEmpty())
-        if(l[0] != "")
-        {
-            QString key = language.key( l[0].toLower() );
-
-            if(!key.isEmpty())
-            {
-                int id = ui->lang_to->findData(l[0].toLower());
-
-                if(id != -1)
-                    ui->lang_to->setCurrentIndex(id);
-            }
-        }
-
-    int id = ui->lang_from->findData("en");
-    if(id != -1)
-        ui->lang_from->setCurrentIndex(id);
-
-    repaint();
 }
 
-void MainWindow::on_translete_clicked()
+void MainWindow::setupNextLesson()
 {
-    QString text = ui->send_translate->toPlainText();
-    if(text.isEmpty())
-        return;
+    int randomIndex = qrand() % 3;
+         // Настраиваем определенный виджет для показ
+//         switch(randomIndex)
+//         0 : translation->setup(); break();
+//         1 : cardWidget->setup(); break();
+//         2 : writeWidget->setup(); break();
 
-    yt->postRequest(ui->lang_to->itemData(ui->lang_to->currentIndex()).toString(),
-                    ui->lang_from->itemData(ui->lang_from->currentIndex()).toString(),
-                    QStringList() << text );
-}
-
-void MainWindow::on_swap_clicked()
-{
-    int lang_to = ui->lang_to->currentIndex();
-    int lang_from = ui->lang_from->currentIndex();
-
-    ui->lang_from->setCurrentIndex(lang_to);
-    ui->lang_to->setCurrentIndex(lang_from);
-
-    QString text = ui->send_translate->toPlainText();
-
-    ui->send_translate->setText(ui->out_translate->toPlainText());
-    ui->out_translate->setText(text);
-
-    repaint();
+//         // Непосредственно активируем нужный на виджет
+//         stackedWidget->setCurrentIndex(randomIndex);
+//         updateStatusBar();
 }

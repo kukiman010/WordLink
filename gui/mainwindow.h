@@ -2,9 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-//#include <QInputMethod>
-#include <QLocale>
-#include "translete_yandex.h"
+#include <QString>
+#include <QDebug>
+
+#include "translation.h"
+#include "dictionary.h"
+#include "training.h"
+#include "settings.h"
+
+
+#include "myswipegesture.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -14,24 +21,34 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    Yandex_translete          * yt;
-    QMap<QString, QString>      language;
-
-public slots:
-    void                        show_in_gui(QStringList qsl);
-    void                        get_lang(QStringList qsl);
 
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
-    void                        on_translete_clicked();
-//    void                        translate(QString str);
+//    enum SwipeDirection {
+//        Left = 0,
+//        Right,
+//        Up,
+//        Down
+//    };
 
-    void on_swap_clicked();
+    bool        event(QEvent *event);
+
+public slots:
+        void    setupNextLesson();
+        void    swipe(MySwipeGesture::SwipeDirection direction);
 
 private:
     Ui::MainWindow *ui;
+
+
+    Translation *    translation;
+    Dictionary *     dictionary;
+    Training *       training;
+    Settings *       setting;
+
+
+    MySwipeGesture * _swipeGesture;
 };
 #endif // MAINWINDOW_H

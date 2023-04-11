@@ -16,14 +16,28 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    dictionary.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    myswipegesture.cpp \
+    settings.cpp \
+    training.cpp \
+    translation.cpp
 
 HEADERS += \
-    mainwindow.h
+    dictionary.h \
+    mainwindow.h \
+    myswipegesture.h \
+    settings.h \
+    training.h \
+    translation.h
 
 FORMS += \
-    mainwindow.ui
+    dictionary.ui \
+    mainwindow.ui \
+    settings.ui \
+    training.ui \
+    translation.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
