@@ -26,8 +26,10 @@ void Settings::on_swap_clicked()
     w->resize(100,30);
     w->setStyleSheet("background-color:black;");
 //    w->setColor(QPalette::Window, Qt::black);
-
 //    ui->stackedWidget->setContentsMargins(0, 0, 0, 0);
+
+
+
 
     ui->gridLayout->addWidget(w);
 

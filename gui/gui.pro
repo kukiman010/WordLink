@@ -20,6 +20,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     myswipegesture.cpp \
+    offercreator.cpp \
     settings.cpp \
     training.cpp \
     translation.cpp
@@ -28,6 +29,7 @@ HEADERS += \
     dictionary.h \
     mainwindow.h \
     myswipegesture.h \
+    offercreator.h \
     settings.h \
     training.h \
     translation.h
@@ -35,6 +37,7 @@ HEADERS += \
 FORMS += \
     dictionary.ui \
     mainwindow.ui \
+    offercreator.ui \
     settings.ui \
     training.ui \
     translation.ui
