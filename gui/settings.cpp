@@ -16,21 +16,18 @@ Settings::~Settings()
 
 void Settings::on_swap_clicked()
 {
-//    QGridLayout gl;
-//    ui->Settings
-//    gl.
-    QWidget * w = new QWidget();
-    w->setWindowFlags( Qt::WindowStaysOnTopHint );
-//    w->se height(100);
-//    w->width(100);
-    w->resize(100,30);
-    w->setStyleSheet("background-color:black;");
-//    w->setColor(QPalette::Window, Qt::black);
-//    ui->stackedWidget->setContentsMargins(0, 0, 0, 0);
+//    QWidget * w = new QWidget();
+//    w->setWindowFlags( Qt::WindowStaysOnTopHint );
+////    w->se height(100);
+////    w->width(100);
+//    w->resize(100,30);
+//    w->setStyleSheet("background-color:black;");
+////    w->setColor(QPalette::Window, Qt::black);
+////    ui->stackedWidget->setContentsMargins(0, 0, 0, 0);
+//    ui->gridLayout->addWidget(w);
 
 
 
 
-    ui->gridLayout->addWidget(w);
 
 }
