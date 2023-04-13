@@ -1,16 +1,95 @@
 #include "offercreator.h"
 #include "ui_offercreator.h"
+//#include <QScrollArea>
+
+
 
 OfferCreator::OfferCreator(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::OfferCreator)
 {
     ui->setupUi(this);
+    _appendix = QSharedPointer<QButtonGroup>(new QButtonGroup);
 }
 
 OfferCreator::~OfferCreator()
 {
     delete ui;
+    connect(_appendix.data(), SIGNAL(buttonPressed(int)), this, SLOT(onClick(int)));
+}
+
+bool OfferCreator::setOffer(const QVector< QPair<QString,QVector<QString>> >& offer)
+{
+    if(offer.isEmpty())
+        return false;
+
+    _offer = offer;
+
+    for(int i=0; i<_offer.size(); ++i)
+    {
+        QPair<QString,QVector<QString>> p = _offer[i];
+        QString word = p.first;
+
+        QPushButton *but = new QPushButton(word);
+        but->setFixedSize(but->sizeHint());
+
+        _appendix->addButton(but, i);
+    }
+
+
+    if(_appendix->buttons().count())
+        return true;
+    else
+        return false;
+}
+
+QWidget *OfferCreator::render()
+{
+    QWidget * main = new QWidget(this);
+
+    if(_appendix->buttons().isEmpty())
+        return nullptr;
+
+
+    QVBoxLayout mainLayout(main);
+    main->setLayout(&mainLayout);
+    main->resize(300,100);
+
+    for(auto but: _appendix->buttons())
+    {
+        mainLayout.addWidget(but);
+    }
+
+
+    return main;
+}
+
+void OfferCreator::clear()
+{
+    _appendix.clear();
+//    QWidget mainWidget;
+//    QScrollArea * scrolArea
+}
+
+
+void OfferCreator::onClick(int countButt)
+{
+//    QObject::sender();
+    QPushButton* button = qobject_cast<QPushButton *>(sender());
+    if (button)
+    {
+        qDebug() << QString::number( countButt );
+    }
+}
+
+void OfferCreator::onDetailClick(int)
+{
+
+}
+
+void OfferCreator::focus()
+{
+
 }
 
 
